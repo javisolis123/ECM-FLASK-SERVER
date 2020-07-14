@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
-from time import time
+import time
 from random import random
 import json
 import flask_csv as cv
+import csv
+import pyexcel as pe
+import io # py2.7, for python3, please use import io
+import datetime
 
 
 app = Flask(__name__)
@@ -11,7 +15,6 @@ app.config['SECRET_KEY'] = 'frida'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://javi:javiersolis12@localhost:3306/Tuti'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
-
 
 class configuracion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -275,10 +278,37 @@ def MostrarAlarmas():
     Alarmas = alarmas.query.filter_by(estado='activo').all()
     return render_template('VistaAlarmas.html', notificaciones = len(Alarmas), datos = Alarmas, titulo="Alarmas")
 
-@app.route("/prueba")
-def index():
-    return cv.send_csv([{"id": 42, "foo": "bar"}, {"id": 91, "foo": "baz"}],
-                    "test.csv", ["id", "foo"])
+@app.route('/getData')
+def download():
+    fechita = str(time.strftime("%d/%m/%Y_%H:%M:%S"))
+    nombre = "attachment; filename =Juno-" + fechita + ".csv"
+    data = []
+    datos = todo.query.all()
+    for dato in datos:
+        info = [] 
+        info.append(str(dato.id))
+        info.append(str(dato.temperatura))
+        info.append(str(dato.humedad))
+        info.append(str(dato.canal1))
+        info.append(str(dato.canal2))
+        info.append(str(dato.canal3))
+        info.append(str(dato.canal4))
+        info.append(str(dato.tempGabinete))
+        info.append(str(dato.hora))
+        info.append(str(dato.fecha))
+        data.append(info)
+    sheet = pe.Sheet(data)
+    f = io.StringIO()
+    sheet.save_to_memory("csv", f)
+    output = make_response(f.getvalue())
+    output.headers["Content-Disposition"] = nombre
+    output.headers["Content-type"] = "text/csv"
+    return output
+
+@app.route('/basedatos')
+def vistaBDD():
+    datos = todo.query.all()
+    return render_template('Vbasedatos.html', titulo = "Descargar BDD", datos = datos)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
