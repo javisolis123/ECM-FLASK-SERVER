@@ -5,142 +5,169 @@
     <div class="container-fluid">
         <div class="row">
             <!-- right column -->
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <!-- general form elements disabled -->
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Seleccionar los datos</h3>
+                        <h3 class="card-title">Seleccionar datos</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form action="/ChangeConfig" method="POST" role="form">
-                        <div class="col-sm-4">
-                            <!-- select -->
-                            <div class="form-group">
-                                <label>Seleccione la marca de la antena</label>
-                                <select class="form-control" name="antena">
-                                    <option value="1">DragonWave</option>
-                                    <option value="2">Siemens</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <!-- select -->
-                            <div class="form-group">
-                                <label>Seleccione la frecuencia de muestreo</label>
-                                <select class="form-control" name="frecuencia">
-                                    <option value="2">2 Minutos</option>
-                                    <option value="10">10 Minutos</option>
-                                    <option value="20">20 Minutos</option>
-                                    <option value="30">30 Minutos</option>
-                                    <option value="60">60 Minutos</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <label>Potencia Maxima Permitida</label>
-                            <input type="text" name="potmax" class="form-control"
-                                placeholder="Potencia maxima aceptada">
-                        </div>
-                        <div class="col-4">
-                            <label>Potencia Minima Permitida</label>
-                            <input type="text" name="potmin" class="form-control"
-                                placeholder="Potencia minima aceptada">
-                        </div>
-                        <div class="col-4">
-                            <label>Temperatura Maxima Gabinete</label>
-                            <input type="text" name="tempmax" class="form-control"
-                                placeholder="Maxima Permitida">
-                        </div>
-                        <div class="col-4">
-                            <label>Temperatura Minima Gabinete</label>
-                            <input type="text" name="tempmin" class="form-control"
-                                placeholder="Minima Permitida">
-                        </div>
-                        <div class="card-body">
-                            <input type="checkbox" checked data-bootstrap-switch id="chec" onchange="comprobar(this)" name="check"> Conexión con CCM
-                        </div>
-                        <div class="col-4">
-                            <label>IP o host de la CCM:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-laptop"></i></span>
+                    <div class="card-body">
+                        <form action="/ChangeConfig" method="POST" role="form">
+                            <h6>
+                                {% if mensaje %}
+                                <p class="text-danger">{{ mensaje | safe }}</p>
+                                {% endif %}
+                            </h6>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Seleccione la marca de la antena</label>
+                                        <<select class="form-control" name="antena">
+                                            <option value="1">DragonWave</option>
+                                            <option value="2">Siemens</option>
+                                            </select>
+                                    </div>
                                 </div>
-                                <input type="text" class="form-control" name="ip" data-inputmask="'alias': 'ip'" data-mask id="ip">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Seleccione la frecuencia de muestreo</label>
+                                        <select class="form-control" name="frecuencia">
+                                            <option value="2">2 Minutos</option>
+                                            <option value="10">10 Minutos</option>
+                                            <option value="20">20 Minutos</option>
+                                            <option value="30">30 Minutos</option>
+                                            <option value="60">60 Minutos</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- /.input group -->
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-secondary">Actualizar</button>
-                        </div>
-                    </form>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Potencia Maxima</label>
+                                        <input type="text" name="potmax" class="form-control"
+                                            placeholder="Potencia Maxima permitida">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Potencia Minima</label>
+                                        <input type="text" name="potmin" class="form-control"
+                                            placeholder="Potencia Minima permitida" />
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Temperatura Gabinete</label>
+                                        <input type="text" name="tempmax" class="form-control"
+                                            placeholder="Maxima temperatura de gabinete permitida">
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Temperatura Gabinete</label>
+                                        <input type="text" name="tempmin" class="form-control"
+                                            placeholder="Minima temperatura de gabinete permitida">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="checkbox" checked data-bootstrap-switch id="chec"
+                                            onchange="comprobar(this)" name="check"> Conexión con CCM
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>IP o host de la CCM:</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-laptop"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="ip"
+                                                data-inputmask="'alias': 'ip'" data-mask id="ip">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.form group -->
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary float-right">Guardar datos</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+                <!--/.col (right) -->
+            </div>
+            
                 
                 <!-- /.card -->
             </div>
-            
-            <!--/.col (right) -->
-        </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
 
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- right column -->
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Configuración Actual del Sistema</h3>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- right column -->
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Configuración Actual del Sistema</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Marca de la Antena</th>
+                                        <th>Frecuencia de Muestreo</th>
+                                        <th>Potencia Maxima</th>
+                                        <th>Potencia Minima</th>
+                                        <th>Temperatura Maxima</th>
+                                        <th>Temperatura Minima</th>
+                                        <th>Estado del CheckBox</th>
+                                        <th>Ip del CCM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        {% if data.tipo == 1 %}
+                                        <td>DragonWave</td>
+                                        {% endif %}
+                                        {% if data.tipo == 2 %}
+                                        <td>Siemens</td>
+                                        {% endif %}
+                                        <td>{{ data.frec }} Minutos</td>
+                                        <td>{{ data.potmax }} [V]</td>
+                                        <td>{{ data.potmin }} [V]</td>
+                                        <td>{{ data.tempmax }} °C</td>
+                                        <td>{{ data.tempmin }} °C</td>
+                                        <td>{{ data.checkbox }}</td>
+                                        <td>{{ data.ip }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body p-0">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 10px">#</th>
-                                    <th>Marca de la Antena</th>
-                                    <th>Frecuencia de Muestreo</th>
-                                    <th>Potencia Maxima</th>
-                                    <th>Potencia Minima</th>
-                                    <th>Temperatura Maxima</th>
-                                    <th>Temperatura Minima</th>
-                                    <th>Estado del CheckBox</th>
-                                    <th>Ip del CCM</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ data.id }}</td>
-                                    {% if data.tipo == 1 %}
-                                    <td>DragonWave</td>
-                                    {% endif %}
-                                    {% if data.tipo == 2 %}
-                                    <td>Siemens</td>
-                                    {% endif %}
-                                    <td>{{ data.frec }} Minutos</td>
-                                    <td>{{ data.potmax }} [V]</td>
-                                    <td>{{ data.potmin }} [V]</td>
-                                    <td>{{ data.tempmax }} °C</td>
-                                    <td>{{ data.tempmin }} °C</td>
-                                    <td>{{ data.checkbox }}</td>
-                                    <td>{{ data.ip }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+                <!--/.col (right) -->
             </div>
-            <!--/.col (right) -->
-        </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
-    <!-- Script para actualizar las alarmas -->
-<script src="{{url_for('static', filename='plugins/charts/prueba.js')}}"></script>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+        <!-- Script para actualizar las alarmas -->
+        <script src="{{url_for('static', filename='plugins/charts/prueba.js')}}"></script>
 </section>
 <!-- /.content -->
 

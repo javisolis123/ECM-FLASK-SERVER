@@ -8,6 +8,7 @@ import csv
 import pyexcel as pe
 import io # py2.7, for python3, please use import io
 import datetime
+import os
 
 
 app = Flask(__name__)
@@ -152,6 +153,12 @@ def PromedioHumedad():
     promedio = suma/aux
     return round(promedio, 3)
 
+def ConvertirHora(hora,minuntos,segundos):
+    resultado1 = hora * 3600
+    resultado2 = minuntos * 60
+    respuesta = resultado1 + resultado2 + segundos
+    return respuesta
+
 
 @app.route('/')
 def home():
@@ -200,7 +207,8 @@ def data1():
     for alarma in Alarmas:
         contador += 1
 
-    data = [(time() - 14400) * 1000,
+    tiempo = ConvertirHora(int(time.strftime("%H")),int(time.strftime("%M")),int(time.strftime("%S")))
+    data = [tiempo * 1000,
             sensores.temperatura,
             sensores.humedad,
             round(sensores.canal1, 4),
@@ -280,7 +288,7 @@ def MostrarAlarmas():
 
 @app.route('/getData')
 def download():
-    fechita = str(time.strftime("%d/%m/%Y_%H:%M:%S"))
+    fechita = str(time.strftime("%d/%m/%Y_%H"))
     nombre = "attachment; filename =Juno-" + fechita + ".csv"
     data = []
     datos = todo.query.all()
@@ -310,5 +318,16 @@ def vistaBDD():
     datos = todo.query.all()
     return render_template('Vbasedatos.html', titulo = "Descargar BDD", datos = datos)
 
+@app.route('/rebootECM')
+def rebootECM():
+    os.system('sudo reboot now')
+
+@app.route('/shutdownECM')
+def shutdownECM():
+    os.system('sudo shutdown now')
+
+@app.route('/sistema')
+def Vsistema():
+    return render_template('Vsistema.html', titulo = "Opciones de los dispositivos")
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
