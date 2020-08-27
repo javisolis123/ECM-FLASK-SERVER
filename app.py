@@ -27,6 +27,7 @@ class configuracion(db.Model):
     tempmin = db.Column(db.Integer)
     checkbox = db.Column(db.String(15))
     ip = db.Column(db.String(15))
+    backup = db.Column(db.String(10))
 
 
 class tecnicos(db.Model):
@@ -173,7 +174,6 @@ def Vista_config():
     Alarmas = alarmas.query.filter_by(estado='activo').all()
     return render_template('vconf.html', data=ConfiGlobal, titulo="Configuracion del Sistema", notificaciones = len(Alarmas))
 
-
 @app.route('/ChangeConfig', methods=['POST'])
 def Actualizar_Config():
     nuevaConfi = configuracion.query.filter_by(id=1).first()
@@ -182,13 +182,18 @@ def Actualizar_Config():
     nuevaConfi.potmax = request.form["potmax"]
     nuevaConfi.potmin = request.form["potmin"]
     nuevaConfi.tempmax = request.form["tempmax"]
-    nuevaConfi.tempmin = request.form["tempmin"]
+    nuevaConfi.tempmin = request.form["tempmin"] 
     if request.form.get('check'):
         nuevaConfi.checkbox = "con CCM"
         nuevaConfi.ip = request.form['ip']
     else:
         nuevaConfi.checkbox = "sin CCM"
         nuevaConfi.ip = '0.0.0.0'
+
+    if request.form.get('backup'):
+        nuevaConfi.backup = "si"
+    else:
+        nuevaConfi.backup = "no"        
     db.session.commit()
     return redirect(url_for('Vista_config'))
 
@@ -292,8 +297,8 @@ def download():
     nombre = "attachment; filename =Juno-" + fechita + ".csv"
     data = []
     datos = todo.query.all()
-    for dato in datos:
-        info = [] 
+    for dato in datos: 
+        info = []
         info.append(str(dato.id))
         info.append(str(dato.temperatura))
         info.append(str(dato.humedad))
@@ -330,4 +335,4 @@ def shutdownECM():
 def Vsistema():
     return render_template('Vsistema.html', titulo = "Opciones de los dispositivos")
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port = '5000')
